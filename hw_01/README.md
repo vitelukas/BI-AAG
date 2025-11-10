@@ -1,0 +1,34 @@
+# Regular Expression Matcher
+
+Regulární výrazy jsou často používané pro kontrolu, zda nějaké slovo splňuje určitá kritéria. Například, chceme-li validovat emailovou adresu či IP adresu, můžeme napsat regulární výraz, který popisuje všechny emailové či IP adresy a nechat naší oblíbenou knihovnu (či nástroj) pro práci s regulárními výrazy zvalidovat různé vstupní řetězce proti výrazu. Cílem této úlohy bude napsat si takovou funkcionalitu.
+
+Regulární výraz je pro potřeby této úlohy definovaný podle přednášek. A to bez zjednodušení, která používáme na cvičeních, tedy např. operátory pro sjednocení a zřetězení (+ a .) jsou striktně binární. Regulární výraz a b c + d + e nad abecedou {a,b,c} je tedy nutné reprezentovat jako (a.(b.c)+d)+e nebo třeba jako (a.b).c+(d+e), nebo dalšími možnými způsoby podle definice.
+
+Jednotlivé regulární výrazy jsou reprezentovány vlastními třídami ve jmenném prostoru (namespace) regexp:
+- ```Empty``` reprezentuje prázdný regulární výraz (∅),
+- ```Epsilon``` reprezentuje prázdné slovo (ε),
+- ```Symbol``` reprezentuje jeden symbol regulárního výrazu,
+- ```Alternation``` reprezentuje regulární výraz sjednocení pomocí binárního operátoru +, na levé i pravé straně se vyskytují regulární výrazy,
+- ```Concatenation``` reprezentuje regulární výraz zřetězení pomocí binárního operátoru ., na levé i pravé straně se vyskytují regulární výrazy,
+- ```Iteration``` reprezentuje unární operátor *, jeho potomkem je regulární výraz. 
+
+Regulární výrazy jsou pak reprezentovány jako stromy složené z těchto tříd. Třída ```regexp::RegExp ```pak reprezentuje libovolný výraz. Všechny tyto třídy jsou definovány v testovacím prostředí a není potřeba ani dovoleno je implementovat.
+
+Vlastní "knihovna" pro matchování regulárních výrazů bude reprezentována funkcí ```std::set<size_t>``` wordsMatch(const regexp::RegExp&, const ```std::vector<Word>&)```. Tato funkce očekává jako parametry regulární výraz a vektor slov, která se mají proti výrazu otestovat. Návratovou hodnotou je množina indexů slov (indexujeme samozřejmě od nuly), která patří do jazyka daného regulárním výrazem. Nedodržení výše předepsaného rozhraní povede k chybě při kompilaci.
+
+Slovo (```Word```) je reprezentováno jako vektor znaků typu ```uint8_t```.
+
+Vkládání hlavičkových souborů, datových struktur a funkce main je zabalené v bloku podmíněného překladu (```#ifdef/#endif```). Ponechte definice těchto struktur, include direktivy preprocesoru i funkci main v blocích podmíněného překladu i v odevzdávaném zdrojovém souboru, jinak program nepůjde v testovacím prostředí zkompilovat.
+
+Program bude spouštěn v omezeném testovacím prostředí. Je omezen dobou běhu a dále je omezena i velikost dostupné paměti.
+
+### Poznámky:
+
+- Potřebné algoritmy pro tento úkol byly probrány v přednáškách a na cvičení.
+- Vstupem je vždy validní regulární výraz podle definice, vstup není potřeba nijak validovat.
+- Regulární výrazy není potřeba nijak optimalizovat. Algoritmy probrané na přednáškách a cvičení fungují pro jakékoliv výrazy.
+- Pro jeden regulární výraz je typicky testováno mnoho řetězců. Pro splnění časového limitu bude vhodné si regulární výraz nějak předzpracovat.
+- Pro jednodušší správu paměti využijte std::unique_ptr nebo případně std::shared_ptr.
+- Časový limit je nastaven poměrně benevolentně. Měl by postačit i pro naivní implementaci algoritmů podle přednášky. Referenční řešení přímočaře implementujte postup podle cvičení, bez jakýchkoliv "triků" a optimalizací.
+- Pokud neznáte std::variant, projděte si pozorně přiložené ukázkové soubory. V nich najdete funkci print(const regex::Regex&), která ukazuje jak jednoduše vytvořit rekurzivní algoritmus nad jednotlivými typy regulárních výrazů. Pokud se vám tento přístup nelíbí, podívejte se na funkce jako std::get, std::get_if a std::holds_alternative.
+- Nápovědy jsou vypisovány ve formátu zpracovatelném nástrojem ALT.
